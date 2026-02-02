@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Valentine? 💕</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Crimson+Pro:wght@400;600&family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --rose: #e63946;
+            --blush: #f8b4b4;
+            --cream: #fff5f5;
+            --deep-rose: #c1121f;
+            --gold: #d4a373;
+            --soft-pink: #ffd6e0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--cream) 0%, var(--soft-pink) 50%, var(--blush) 100%);
+            font-family: 'Crimson Pro', Georgia, serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Floating hearts background */
+        .hearts-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .floating-heart {
+            position: absolute;
+            font-size: 20px;
+            opacity: 0.3;
+            animation: floatUp 15s linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Main container */
+        .container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Stage management */
+        .stage {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .stage.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Question styling */
+        .question {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: clamp(2rem, 8vw, 4rem);
+            color: var(--deep-rose);
+            text-shadow: 2px 2px 4px rgba(198, 18, 31, 0.2);
+            margin-bottom: 40px;
+            animation: pulse 2s ease-in-out infinite, shimmer 3s ease-in-out infinite;
+            position: relative;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes shimmer {
+            0%, 100% {
+                text-shadow: 2px 2px 4px rgba(198, 18, 31, 0.2),
+                             0 0 20px rgba(230, 57, 70, 0.3);
+            }
+            50% {
+                text-shadow: 2px 2px 4px rgba(198, 18, 31, 0.4),
+                             0 0 40px rgba(230, 57, 70, 0.5),
+                             0 0 60px rgba(230, 57, 70, 0.3);
+            }
+        }
+
+        /* Photo styling */
+        .photo-frame {
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            padding: 8px;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--rose) 50%, var(--gold) 100%);
+            box-shadow: 0 10px 40px rgba(198, 18, 31, 0.3),
+                        0 0 0 4px var(--cream),
+                        0 0 0 8px var(--blush);
+            margin-bottom: 50px;
+            animation: gentleFloat 4s ease-in-out infinite;
+        }
+
+        @keyframes gentleFloat {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* Buttons container */
+        .buttons {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+            position: relative;
+            min-height: 80px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        /* Button styling */
+        .btn {
+            padding: 18px 50px;
+            font-family: 'Pacifico', cursive;
+            font-size: 1.5rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-yes {
+            background: linear-gradient(135deg, var(--rose) 0%, var(--deep-rose) 100%);
+            color: white;
+            box-shadow: 0 6px 20px rgba(230, 57, 70, 0.4);
+        }
+
+        .btn-yes:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(230, 57, 70, 0.5);
+        }
+
+        .btn-yes::after {
+            content: '💕';
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            animation: heartBeat 1s ease-in-out infinite;
+        }
+
+        @keyframes heartBeat {
+            0%, 100% { transform: translateY(-50%) scale(1); }
+            50% { transform: translateY(-50%) scale(1.2); }
+        }
+
+        .btn-no {
+            background: linear-gradient(135deg, #ccc 0%, #999 100%);
+            color: white;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            transition: all 0.15s ease;
+        }
+
+        /* Are you sure stage */
+        .sure-text {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            color: var(--deep-rose);
+            margin-bottom: 30px;
+            animation: wobble 0.8s ease-in-out;
+        }
+
+        @keyframes wobble {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-5deg); }
+            75% { transform: rotate(5deg); }
+        }
+
+        .btn-sure {
+            padding: 20px 60px;
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--rose) 50%, var(--deep-rose) 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 2s ease-in-out infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Heart spill animation container */
+        .heart-spill-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .spill-heart {
+            position: absolute;
+            font-size: 30px;
+            animation: spillOut 2s ease-out forwards;
+        }
+
+        @keyframes spillOut {
+            0% {
+                opacity: 1;
+                transform: scale(0) rotate(0deg);
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: scale(1) rotate(720deg) translateY(100vh);
+            }
+        }
+
+        /* Celebration stage */
+        .celebration {
+            text-align: center;
+        }
+
+        .yaas-gif {
+            max-width: 400px;
+            width: 90%;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(198, 18, 31, 0.3);
+        }
+
+        .final-photo {
+            max-width: 500px;
+            width: 90%;
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(198, 18, 31, 0.4);
+            opacity: 0;
+            animation: fadeInPhoto 1.5s ease-out forwards;
+        }
+
+        @keyframes fadeInPhoto {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .final-message {
+            font-family: 'Pacifico', cursive;
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            color: var(--deep-rose);
+            margin-top: 30px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        /* Decorative elements */
+        .sparkle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: var(--gold);
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            animation: sparkle 1.5s ease-in-out infinite;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1) rotate(180deg); }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .buttons {
+                gap: 20px;
+            }
+            
+            .btn {
+                padding: 15px 35px;
+                font-size: 1.2rem;
+            }
+
+            .photo-frame {
+                width: 220px;
+                height: 220px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating hearts background -->
+    <div class="hearts-bg" id="heartsBg"></div>
+    
+    <!-- Heart spill container -->
+    <div class="heart-spill-container" id="heartSpill"></div>
+
+    <div class="container">
+        <!-- Stage 1: Main Question -->
+        <div class="stage active" id="stage1">
+            <h1 class="question">Will You Be My Valentine?</h1>
+            
+            <div class="photo-frame">
+                <!-- Replace with your wife's photo (change .svg to .jpg when you add real photos) -->
+                <img src="images/her.svg" alt="My Beautiful Wife" id="herPhoto">
+            </div>
+            
+            <div class="buttons">
+                <button class="btn btn-yes" onclick="showAreYouSure()">Yes!</button>
+                <button class="btn btn-no" id="noBtn" onmouseover="moveNoButton()" onclick="moveNoButton()">No</button>
+            </div>
+        </div>
+
+        <!-- Stage 2: Are You Sure -->
+        <div class="stage" id="stage2">
+            <h2 class="sure-text">Are you sure? 🤔</h2>
+            <p style="font-size: 1.3rem; color: var(--rose); margin-bottom: 30px; font-style: italic;">
+                Don't you want to try clicking No? 😏
+            </p>
+            <button class="btn btn-yes btn-sure" onclick="celebrate()">YES, I'm Sure! 💖</button>
+        </div>
+
+        <!-- Stage 3: Celebration -->
+        <div class="stage" id="stage3">
+            <div class="celebration" id="celebrationContent">
+                <!-- Content will be dynamically added -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Create floating hearts background
+        function createFloatingHearts() {
+            const container = document.getElementById('heartsBg');
+            const hearts = ['💕', '💖', '💗', '💓', '💝', '❤️', '💘', '💞'];
+            
+            for (let i = 0; i < 20; i++) {
+                const heart = document.createElement('span');
+                heart.className = 'floating-heart';
+                heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 15 + 's';
+                heart.style.fontSize = (15 + Math.random() * 20) + 'px';
+                container.appendChild(heart);
+            }
+        }
+
+        createFloatingHearts();
+
+        // No button escape logic
+        let noButtonMoves = 0;
+        const maxMoves = 10;
+        
+        function moveNoButton() {
+            const btn = document.getElementById('noBtn');
+            const container = btn.parentElement;
+            
+            noButtonMoves++;
+            
+            if (noButtonMoves > maxMoves) {
+                btn.textContent = "Fine, I give up! 😤";
+                btn.style.opacity = "0.3";
+                btn.style.pointerEvents = "none";
+                return;
+            }
+
+            // Get container bounds
+            const containerRect = container.getBoundingClientRect();
+            const btnRect = btn.getBoundingClientRect();
+            
+            // Calculate random position within viewport
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+            
+            let newX = Math.random() * (viewportWidth - btnRect.width - 40) + 20;
+            let newY = Math.random() * (viewportHeight - btnRect.height - 40) + 20;
+            
+            // Make sure it stays away from the Yes button
+            const yesBtn = document.querySelector('.btn-yes');
+            const yesBtnRect = yesBtn.getBoundingClientRect();
+            
+            // If too close to Yes button, move further
+            if (Math.abs(newX - yesBtnRect.left) < 150 && Math.abs(newY - yesBtnRect.top) < 100) {
+                newX = newX > viewportWidth / 2 ? newX - 200 : newX + 200;
+            }
+            
+            btn.style.position = 'fixed';
+            btn.style.left = newX + 'px';
+            btn.style.top = newY + 'px';
+            btn.style.zIndex = '50';
+            
+            // Fun messages
+            const messages = [
+                "Nope! 😜", "Try again! 💨", "Too slow! 🏃", 
+                "Can't catch me! 😂", "Nice try! 🙈", "Haha! 😝",
+                "Almost! 🎯", "Keep trying! 🌟", "So close! 🤏"
+            ];
+            btn.textContent = messages[Math.min(noButtonMoves - 1, messages.length - 1)];
+        }
+
+        // Show "Are you sure" stage
+        function showAreYouSure() {
+            document.getElementById('stage1').classList.remove('active');
+            document.getElementById('stage2').classList.add('active');
+            
+            // Hide the escaped No button if it exists
+            const noBtn = document.getElementById('noBtn');
+            noBtn.style.display = 'none';
+        }
+
+        // Heart spill animation
+        function spillHearts(x, y) {
+            const container = document.getElementById('heartSpill');
+            const hearts = ['💕', '💖', '💗', '💓', '💝', '❤️', '💘', '💞', '💜', '💛', '🧡', '💚'];
+            
+            for (let i = 0; i < 50; i++) {
+                const heart = document.createElement('span');
+                heart.className = 'spill-heart';
+                heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+                heart.style.left = x + 'px';
+                heart.style.top = y + 'px';
+                heart.style.fontSize = (20 + Math.random() * 30) + 'px';
+                
+                // Random direction
+                const angle = (Math.random() * 360) * (Math.PI / 180);
+                const distance = 100 + Math.random() * 300;
+                const endX = Math.cos(angle) * distance;
+                const endY = Math.sin(angle) * distance + 200;
+                
+                heart.style.setProperty('--end-x', endX + 'px');
+                heart.style.setProperty('--end-y', endY + 'px');
+                
+                heart.animate([
+                    { 
+                        transform: 'scale(0) rotate(0deg)',
+                        opacity: 1
+                    },
+                    { 
+                        transform: `scale(1.5) rotate(360deg) translate(${endX}px, ${endY}px)`,
+                        opacity: 0
+                    }
+                ], {
+                    duration: 1500 + Math.random() * 1000,
+                    easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                    fill: 'forwards',
+                    delay: Math.random() * 200
+                });
+                
+                container.appendChild(heart);
+                
+                // Clean up after animation
+                setTimeout(() => heart.remove(), 3000);
+            }
+        }
+
+        // Celebration sequence
+        function celebrate() {
+            // Get button position for heart spill origin
+            const btn = event.target;
+            const rect = btn.getBoundingClientRect();
+            const x = rect.left + rect.width / 2;
+            const y = rect.top + rect.height / 2;
+            
+            // Spill hearts!
+            spillHearts(x, y);
+            
+            // Transition to celebration stage after a brief delay
+            setTimeout(() => {
+                document.getElementById('stage2').classList.remove('active');
+                document.getElementById('stage3').classList.add('active');
+                showYaaas();
+            }, 800);
+        }
+
+        // Show YAAAS gif then fade to photos
+        function showYaaas() {
+            const content = document.getElementById('celebrationContent');
+            
+            // Show YAAAS gif
+            content.innerHTML = `
+                <img src="images/yaas.svg" alt="YAAAAS!" class="yaas-gif" id="yaasGif">
+            `;
+            
+            // After 3 seconds, fade to couple photo
+            setTimeout(() => {
+                content.innerHTML = `
+                    <img src="images/us.svg" alt="Us Together" class="final-photo">
+                    <p class="final-message">Forever & Always 💕</p>
+                `;
+                
+                // After 4 more seconds, fade to photo with cat
+                setTimeout(() => {
+                    content.innerHTML = `
+                        <img src="images/us-with-cat.svg" alt="Us with our Cat" class="final-photo">
+                        <p class="final-message">Our Little Family 🐱💕</p>
+                    `;
+                    
+                    // Final message after photo with cat
+                    setTimeout(() => {
+                        const finalMsg = document.createElement('p');
+                        finalMsg.style.cssText = `
+                            font-family: 'Pacifico', cursive;
+                            font-size: 2rem;
+                            color: var(--deep-rose);
+                            margin-top: 40px;
+                            animation: pulse 2s ease-in-out infinite;
+                        `;
+                        finalMsg.innerHTML = 'I Love You! ❤️';
+                        content.appendChild(finalMsg);
+                    }, 2000);
+                    
+                }, 4000);
+                
+            }, 3000);
+        }
+
+        // Add sparkles randomly
+        function addSparkles() {
+            const container = document.querySelector('.container');
+            setInterval(() => {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.top = Math.random() * 100 + '%';
+                sparkle.style.animationDelay = Math.random() * 0.5 + 's';
+                container.appendChild(sparkle);
+                
+                setTimeout(() => sparkle.remove(), 1500);
+            }, 300);
+        }
+
+        addSparkles();
+    </script>
+</body>
+</html>
