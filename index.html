@@ -366,7 +366,7 @@
             
             <div class="photo-frame">
                 <!-- Replace with your wife's photo (change .svg to .jpg when you add real photos) -->
-                <img src="images/her.svg" alt="My Beautiful Wife" id="herPhoto">
+                <img src="images/her.jpg" alt="My Beautiful Wife" id="herPhoto">
             </div>
             
             <div class="buttons">
@@ -542,20 +542,20 @@
             
             // Show YAAAS gif
             content.innerHTML = `
-                <img src="images/yaas.svg" alt="YAAAAS!" class="yaas-gif" id="yaasGif">
+                <img src="images/yaas.gif" alt="YAAAAS!" class="yaas-gif" id="yaasGif">
             `;
             
             // After 3 seconds, fade to couple photo
             setTimeout(() => {
                 content.innerHTML = `
-                    <img src="images/us.svg" alt="Us Together" class="final-photo">
+                    <img src="images/us.jpg" alt="Us Together" class="final-photo">
                     <p class="final-message">Forever & Always 💕</p>
                 `;
                 
                 // After 4 more seconds, fade to photo with cat
                 setTimeout(() => {
                     content.innerHTML = `
-                        <img src="images/us-with-cat.svg" alt="Us with our Cat" class="final-photo">
+                        <img src="images/us-with-cat.jpg" alt="Us with our Cat" class="final-photo">
                         <p class="final-message">Our Little Family 🐱💕</p>
                     `;
                     
